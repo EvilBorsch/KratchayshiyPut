@@ -81,35 +81,29 @@ vector<int> ListGraph::GetPrevVertices(int vertex) const {
 
 
 int search(const IGraph &graph, int vertex, int cel) {
-    std::vector<int> dst(graph.VerticesCount() + 1);
-    dst[0] = 0;
-    int min_dist = 0;
-    vector<bool> visited(graph.VerticesCount(), false);
-    std::queue<int> qu;
-    qu.push(vertex);
-    visited[vertex] = true;
-    int countOfPaths = 0;
-
-    while (!qu.empty()) {
-        int current = qu.front();
-        qu.pop();
+    vector<int> count_path(graph.VerticesCount());
+    vector<int> dist(graph.VerticesCount());
+    queue<int> queue;
+    queue.push(vertex);
+    count_path[vertex] = 1;
+    while (!queue.empty()) {
+        int current = queue.front();
+        queue.pop();
         if (current != cel) {
-            vector<int> nextVertices = graph.GetNextVertices(current);
-            for (int v : nextVertices) {
-                if ((!visited[v] && v != cel)) {
-                    qu.push(v);
-                    visited[v] = true;
-                    dst[v] = dst[current] + 1;
-                }
-                if (v == cel) {
-                    if (min_dist == 0) min_dist = dst[current] + 1;
-                    if (min_dist == dst[current] + 1)
-                        countOfPaths++;
+            vector<int> verticies = graph.GetNextVertices(current);
+            for (auto &i: verticies) {
+                if (!count_path[i]) {
+                    queue.push(i);
+                    count_path[i] = count_path[current];
+                    dist[i] = dist[current] + 1;
+                } else if (dist[i] == dist[current] + 1) {
+                    count_path[i] += count_path[current];
                 }
             }
         }
     }
-    return countOfPaths;
+
+    return count_path[cel];
 }
 
 
@@ -119,7 +113,7 @@ void contest() {
     int r;
     std::cin >> r;
     int from, to;
-    ListGraph list(N);
+    ListGraph list(N + 1);
     for (int i = 0; i < r; i++) {
         std::cin >> from;
         std::cin >> to;
