@@ -127,18 +127,6 @@ void contest() {
 }
 
 int main() {
-
-    //test();
-
     contest();
-
-    //ListGraph g(5);
-    //g.AddEdge(0, 1);
-    //g.AddEdge(0, 2);
-    //g.AddEdge(1, 2);
-    //g.AddEdge(1, 3);
-    //g.AddEdge(2, 3);
-    //int res = search(g, 0, 3);
-    //std::cout<<res;
     return 0;
 }
